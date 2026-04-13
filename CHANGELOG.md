@@ -2,7 +2,7 @@
 
 ### Documentation
 
-- updated readme (efe5cde)
+- updated readme (dfc0b99)
 - added system-wide install instructions (d9b80f4)
 - updated reamde (94e4ca8)
 
@@ -13,6 +13,7 @@
 
 ### Other changes
 
+- default concurrency to 2 (c6be872)
 - robust find-chromium fun (2cc1e25)
 - updated docs and hide audio-controls for taking screenshots (9022514)
 - configured pre-commit hooks (e2f68fb)

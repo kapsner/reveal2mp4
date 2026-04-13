@@ -18,7 +18,7 @@ const noSandbox = argv.includes('--no-sandbox');
 const disableSetuidSandbox = argv.includes('--disable-setuid-sandbox');
 
 // Find browser/concurrency flags
-let concurrency = os.cpus().length;
+let concurrency = 2;
 let browserPath = null;
 
 const jIdx = argv.findIndex(arg => arg === '-j' || arg === '--concurrency');
@@ -43,7 +43,7 @@ if (args.length < 1 || help) {
   console.log('Reveal.js to MP4 Converter');
   console.log('Usage: reveal2mp4 [options] <html-file> [output.mp4]');
   console.log('\nOptions:');
-  console.log('  -j, --concurrency <n>    Number of parallel encoding jobs (default: CPU cores)');
+  console.log('  -j, --concurrency <n>    Number of parallel encoding jobs (default: 2)');
   console.log('  --browser <path>         Path to Chromium/Chrome executable');
   console.log('  --no-sandbox             Disable Puppeteer sandbox (use with caution)');
   console.log('  --disable-setuid-sandbox Disable Puppeteer setuid sandbox (use with caution)');
