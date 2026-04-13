@@ -11,5 +11,3 @@ repos:
       - id: troi-lab-base-hooks
       - id: check-commit-msg
       - id: recreate-changelog
-      - id: bump-version
-      - id: bump-version-tag-pusher
