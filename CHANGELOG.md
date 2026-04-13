@@ -2,6 +2,7 @@
 
 ### Documentation
 
+- updated readme (efe5cde)
 - added system-wide install instructions (d9b80f4)
 - updated reamde (94e4ca8)
 
@@ -12,7 +13,7 @@
 
 ### Other changes
 
-- robust find-chromium fun (2568326)
+- robust find-chromium fun (2cc1e25)
 - updated docs and hide audio-controls for taking screenshots (9022514)
 - configured pre-commit hooks (e2f68fb)
 - configured pre-commit hooks (7374bd5)

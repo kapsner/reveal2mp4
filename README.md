@@ -1,8 +1,8 @@
-# Reveal.js to MP4 Converter
+# `reveal2mp4` - Reveal.js to MP4 Converter
 
-I was tired of endless recording sessions using [OBS](https://github.com/obsproject/obs-studio) (great tool BTW) watching the [reveal.js](https://github.com/hakimel/reveal.js) slideshow with audio-playback just to turn it into an MP4 video.
+I was tired of endless recording sessions using [OBS](https://github.com/obsproject/obs-studio) (great tool BTW) watching my [reveal.js](https://github.com/hakimel/reveal.js) slideshows with audio-playback only to "convert" it into an MP4 video.
 
-So this is a (mostly vibe-coded using [gemini-cli](https://github.com/google-gemini/gemini-cli)) terminal-based tool to render a [reveal.js](https://github.com/hakimel/reveal.js) slideshow with audio-playback (e.g. using [`audio-slideshow`](https://github.com/rajgoel/reveal.js-plugins/blob/master/audio-slideshow/README.md) or its Quarto-port [`audio-slideshow`](https://github.com/kapsner/audio-slideshow)) into a high-quality MP4 video. It automatically synchronizes slide and fragment transitions with their corresponding audio files.
+So I finally came up with this (mostly vibe-coded using [gemini-cli](https://github.com/google-gemini/gemini-cli)) terminal-based tool to render a [reveal.js](https://github.com/hakimel/reveal.js) slideshow with audio-playback (e.g. using [`audio-slideshow`](https://github.com/rajgoel/reveal.js-plugins/blob/master/audio-slideshow/README.md) or its Quarto-port [`audio-slideshow`](https://github.com/kapsner/audio-slideshow)) directly into a high-quality MP4 video. Under the hood, `reveal2mp4` launches a browser and captures snapshots by navigating through slides and fragments. Available audio files are automatically mapped to each screenshot, ensuring synchronization of slide and fragment transitions with their corresponding audio files.
 
 ## Features
 
@@ -104,7 +104,7 @@ To run the tool from anywhere in your terminal without specifying the path to th
 
 Now you can simply run `reveal2mp4 slideshow.html` from any directory.
 
-
+:bulb: Tip: to use puppeteer's chromium, you can find out its path by running `node -e 'console.log(require("puppeteer").executablePath())'` in a shell and provide the resulting path with the `--browser` flag to the reveal2mp4 executable.
 
 ## Technical Specifications
 
