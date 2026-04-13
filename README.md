@@ -1,14 +1,14 @@
 # Reveal.js to MP4 Converter
 
-I was tired of endless recording sessions using [OBS](https://github.com/obsproject/obs-studio) (great tool BTW) watching the revealjs slideshow with audio-playback just to turn it into an mp4-video.
+I was tired of endless recording sessions using [OBS](https://github.com/obsproject/obs-studio) (great tool BTW) watching the [reveal.js](https://github.com/hakimel/reveal.js) slideshow with audio-playback just to turn it into an MP4 video.
 
-So this is a (mostly vibe-coded using [gemini-cli](https://github.com/google-gemini/gemini-cli)) terminal-based tool to render a Reveal.js slideshow with audio-playback (e.g. using [`audio-slideshow`](https://github.com/rajgoel/reveal.js-plugins/blob/master/audio-slideshow/README.md) or its Quarto-Plugin part [`audio-slideshow`](https://github.com/kapsner/audio-slideshow)) into a high-quality MP4 video. It automatically synchronizes slide and fragment transitions with their corresponding audio files.
+So this is a (mostly vibe-coded using [gemini-cli](https://github.com/google-gemini/gemini-cli)) terminal-based tool to render a [reveal.js](https://github.com/hakimel/reveal.js) slideshow with audio-playback (e.g. using [`audio-slideshow`](https://github.com/rajgoel/reveal.js-plugins/blob/master/audio-slideshow/README.md) or its Quarto-port [`audio-slideshow`](https://github.com/kapsner/audio-slideshow)) into a high-quality MP4 video. It automatically synchronizes slide and fragment transitions with their corresponding audio files.
 
 ## Features
 
-- **Automated Capture**: Uses Puppeteer to navigate through slides and fragments.
-- **Audio Synchronization**: Maps audio files to specific slides/fragments using Reveal.js conventions (`H.V.webm` or `H.V.F.webm`).
-- **Precision Timing**: Extracts exact audio durations using `ffprobe` to ensure the video stays in sync.
+- **Automated Capture**: Uses [Puppeteer](https://github.com/puppeteer/puppeteer) to navigate through slides and fragments.
+- **Audio Synchronization**: Maps audio files to specific slides/fragments using [reveal.js](https://github.com/hakimel/reveal.js) conventions (`H.V.webm` or `H.V.F.webm`).
+- **Precision Timing**: Extracts exact audio durations using [`ffprobe`](https://ffmpeg.org/ffprobe.html) to ensure the video stays in sync.
 - **Headless Rendering**: Works in the background without needing a visible browser window.
 - **1080p Quality**: Captures and encodes at Full HD resolution.
 
