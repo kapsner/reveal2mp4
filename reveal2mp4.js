@@ -45,6 +45,8 @@ if (args.length < 1 || help) {
   process.exit(0);
 }
 
+const activeProcesses = new Set();
+
 function runCommand(cmd, args, options = {}) {
   const result = spawnSync(cmd, args, { encoding: 'utf8', ...options });
   if (result.error) {
@@ -59,11 +61,13 @@ function runCommand(cmd, args, options = {}) {
 function asyncRunCommand(cmd, args, options = {}) {
   return new Promise((resolve, reject) => {
     const child = spawn(cmd, args, options);
+    activeProcesses.add(child);
     let stderr = '';
     child.stderr.on('data', (data) => {
       stderr += data.toString();
     });
     child.on('close', (code) => {
+      activeProcesses.delete(child);
       if (code !== 0) {
         reject(new Error(`Command failed with exit code ${code}: ${cmd} ${args.join(' ')}\n${stderr}`));
       } else {
@@ -71,6 +75,7 @@ function asyncRunCommand(cmd, args, options = {}) {
       }
     });
     child.on('error', (err) => {
+      activeProcesses.delete(child);
       reject(err);
     });
   });
@@ -291,11 +296,34 @@ async function run() {
     console.error('\n>>> Error occurred:', err.message);
     process.exitCode = 1;
   } finally {
-    if (browser) await browser.close();
+    // Kill any active subprocesses
+    for (const child of activeProcesses) {
+      try { child.kill('SIGTERM'); } catch (e) {}
+    }
+    activeProcesses.clear();
+
+    if (browser) {
+        try { await browser.close(); } catch (e) {}
+    }
     if (tmpDir && fs.existsSync(tmpDir)) {
-      fs.rmSync(tmpDir, { recursive: true, force: true });
+      try {
+        fs.rmSync(tmpDir, { recursive: true, force: true });
+        console.log(`>>> Cleaned up temporary directory: ${tmpDir}`);
+      } catch (e) {
+        console.warn(`\n>>> Warning: Failed to clean up temporary directory: ${tmpDir}. Error: ${e.message}`);
+      }
     }
   }
 }
+
+// Global signal handling to trigger cleanup
+process.on('SIGINT', () => {
+    console.log('\n>>> Process interrupted. Cleaning up...');
+    process.exit(1); // Triggers 'exit' event or we can just let run() finish its finally
+});
+process.on('SIGTERM', () => {
+    console.log('\n>>> Process terminated. Cleaning up...');
+    process.exit(1);
+});
 
 run();

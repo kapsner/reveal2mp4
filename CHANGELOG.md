@@ -7,7 +7,8 @@
 
 ### New Features
 
-- parallel rendering for increased performance (b7a1867)
+- improved error handling (90f5b1c)
+- parallel rendering for increased performance (08052dc)
 
 ### Other changes
 
