@@ -125,6 +125,9 @@ async function run() {
           -o-animation: none !important;
           animation: none !important;
         }
+        .reveal .audio-controls {
+          display: none !important;
+        }
       `
     });
 

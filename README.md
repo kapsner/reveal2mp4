@@ -45,8 +45,16 @@ Puppeteer requires a browser to render the slides. Usually, it downloads a local
 Run the script directly using Node:
 
 ```bash
-./reveal2mp4.js /path/to/slideshow.html [output_name.mp4]
+./reveal2mp4.js [options] <html-file> [output.mp4]
 ```
+
+### Options
+
+| Flag | Description |
+| :--- | :--- |
+| `--no-sandbox` | Disables the Puppeteer sandbox. Use only in trusted environments (e.g., specific Docker containers). |
+| `--disable-setuid-sandbox` | Disables the setuid sandbox for Puppeteer. |
+| `--help`, `-h` | Show usage information and available options. |
 
 ## Compiling to an Executable
 
