@@ -8,12 +8,13 @@
 
 ### New Features
 
+- constant video framerate, high-res capturing, full-hd video-rendering (104d8d3)
 - improved error handling (71e3e96)
 - parallel rendering for increased performance (08052dc)
 
 ### Other changes
 
-- fixed typo (e6853f9)
+- fixed typo (29adceb)
 - video resolution to wqhd (6423802)
 - printing duration of the cmd-run at the end (ab15071)
 - default concurrency to 2 (18b17bf)

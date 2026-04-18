@@ -1,8 +1,8 @@
-# `reveal2mp4` - Reveal.js to MP4 Converter
+# `reveal2mp4` - Reveal.js to MKV Converter
 
 I was tired of endless recording sessions using [OBS](https://github.com/obsproject/obs-studio) (great tool BTW) watching my [reveal.js](https://github.com/hakimel/reveal.js) slideshows with audio-playback only to "convert" it into an MP4 video.
 
-So I finally came up with this (mostly vibe-coded using [gemini-cli](https://github.com/google-gemini/gemini-cli)) terminal-based tool to render a [reveal.js](https://github.com/hakimel/reveal.js) slideshow with audio-playback (e.g. using [`audio-slideshow`](https://github.com/rajgoel/reveal.js-plugins/blob/master/audio-slideshow/README.md) or its Quarto-port [`audio-slideshow`](https://github.com/kapsner/audio-slideshow)) directly into a high-quality MP4 video. Under the hood, `reveal2mp4` launches a browser and captures snapshots by navigating through slides and fragments. Available audio files are automatically mapped to each screenshot, ensuring synchronization of slide and fragment transitions with their corresponding audio files.
+So I finally came up with this (mostly vibe-coded using [gemini-cli](https://github.com/google-gemini/gemini-cli)) terminal-based tool to render a [reveal.js](https://github.com/hakimel/reveal.js) slideshow with audio-playback (e.g. using [`audio-slideshow`](https://github.com/rajgoel/reveal.js-plugins/blob/master/audio-slideshow/README.md) or its Quarto-port [`audio-slideshow`](https://github.com/kapsner/audio-slideshow)) directly into a high-quality MKV video. Under the hood, `reveal2mp4` launches a browser and captures snapshots by navigating through slides and fragments. Available audio files are automatically mapped to each screenshot, ensuring synchronization of slide and fragment transitions with their corresponding audio files.
 
 ## Features
 
@@ -10,7 +10,7 @@ So I finally came up with this (mostly vibe-coded using [gemini-cli](https://git
 - **Audio Synchronization**: Maps audio files to specific slides/fragments using [reveal.js](https://github.com/hakimel/reveal.js) conventions (`H.V.webm` or `H.V.F.webm`).
 - **Precision Timing**: Extracts exact audio durations using [`ffprobe`](https://ffmpeg.org/ffprobe.html) to ensure the video stays in sync.
 - **Headless Rendering**: Works in the background without needing a visible browser window.
-- **1080p Quality**: Captures and encodes at Full HD resolution.
+- **Optimized Quality**: Captures at 1440p (QHD) and renders at 1080p (FHD) for superior sharpness (supersampling).
 
 ## System Requirements
 
@@ -45,7 +45,7 @@ Puppeteer requires a browser to render the slides. Usually, it downloads a local
 Run the script directly using Node:
 
 ```bash
-./reveal2mp4.js [options] <html-file> [output.mp4]
+./reveal2mp4.js [options] <html-file> [output.mkv]
 ```
 
 ### Options
@@ -108,21 +108,24 @@ Now you can simply run `reveal2mp4 slideshow.html` from any directory.
 
 ## Technical Specifications
 
-The tool uses the following default settings for video and audio encoding:
+The tool uses the following default settings for constant bitrate and high-quality encoding:
 
 | Parameter | Default Value | Description |
 | :--- | :--- | :--- |
-| **Video Resolution** | 2560 x 1440 (1440) | WQHD (Wide Quad HD) |
-| **Frame Rate** | 25 FPS | Standard cinematic frame rate. |
-| **Video Codec** | libx264 (H.264) | High compatibility across all devices and players. |
-| **Pixel Format** | yuv420p | Required for broad hardware player compatibility. |
-| **Audio Codec** | AAC | Advanced Audio Coding for high efficiency. |
-| **Audio Bitrate** | 192 kb/s | High quality stereo audio. |
-| **Sample Rate** | 44.1 kHz / 48.0 kHz | Standard audio sampling rates. |
+| **Container** | Matroska (.mkv) | Ideal for high-quality streams and seamless concatenation. |
+| **Capture Resolution** | 2560 x 1440 (1440p) | QHD (Quad HD) for detail. |
+| **Output Resolution** | 1920 x 1080 (1080p) | FHD (Full HD) for broad compatibility. |
+| **Frame Rate** | 25 FPS | Constant frame rate. |
+| **Video Bitrate** | 10 Mb/s (CBR) | High constant bitrate for superior visual quality. |
+| **Video Codec** | libx264 (H.264) | High Profile, Level 4.1. |
+| **Pixel Format** | yuv420p | Broad hardware and player compatibility. |
+| **Audio Codec** | AAC | Advanced Audio Coding. |
+| **Audio Bitrate** | 192 kb/s (CBR) | High constant audio quality. |
+| **Sample Rate** | 44.1 kHz | CD-quality audio sampling rate. |
 
 ## How it works
 
 1. **Extraction**: The tool launches a headless browser, navigates to every slide/fragment, and takes a high-resolution screenshot.
 2. **Analysis**: It identifies the associated audio file for each state and calculates its exact duration.
-3. **Processing**: Individual video segments are created for each slide/fragment state.
-4. **Final Assembly**: All segments are concatenated into a single MP4 file.
+3. **Processing**: Individual video segments are created for each slide/fragment state using the constant bitrate settings.
+4. **Final Assembly**: All segments are concatenated into a single MKV file.

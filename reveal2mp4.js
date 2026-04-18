@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * reveal2mp4 - Convert Reveal.js slideshow with audio to MP4
+ * reveal2mp4 - Convert Reveal.js slideshow with audio to MKV
  *
- * Usage: ./reveal2mp4.js <html-file> [output.mp4]
+ * Usage: ./reveal2mp4.js <html-file> [output.mkv]
  */
 
 const puppeteer = require('puppeteer');
@@ -11,6 +11,16 @@ const { spawnSync, spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+
+// Constants for high-quality encoding
+const CAPTURE_WIDTH = 2560;
+const CAPTURE_HEIGHT = 1440;
+const OUTPUT_WIDTH = 1920;
+const OUTPUT_HEIGHT = 1080;
+const VIDEO_BITRATE = '10M';
+const AUDIO_BITRATE = '192k';
+const SAMPLE_RATE = '44100';
+const FRAME_RATE = '25';
 
 const argv = process.argv.slice(2);
 const help = argv.includes('--help') || argv.includes('-h');
@@ -40,8 +50,8 @@ const args = argv.filter((arg, i) => {
 });
 
 if (args.length < 1 || help) {
-  console.log('Reveal.js to MP4 Converter');
-  console.log('Usage: reveal2mp4 [options] <html-file> [output.mp4]');
+  console.log('Reveal.js to MKV Converter');
+  console.log('Usage: reveal2mp4 [options] <html-file> [output.mkv]');
   console.log('\nOptions:');
   console.log('  -j, --concurrency <n>    Number of parallel encoding jobs (default: 2)');
   console.log('  --browser <path>         Path to Chromium/Chrome executable');
@@ -114,7 +124,7 @@ if (!fs.existsSync(htmlFile)) {
     process.exit(1);
 }
 
-const outputFile = args[1] || htmlFile.replace(/\.html$/, '.mp4');
+const outputFile = args[1] || htmlFile.replace(/\.html$/, '.mkv');
 if (path.resolve(outputFile) === htmlFile) {
     console.error('Error: Output file must be different from input file.');
     process.exit(1);
@@ -180,7 +190,7 @@ async function run() {
 
     browser = await puppeteer.launch(launchOptions);
     const page = await browser.newPage();
-    await page.setViewport({ width: 2560, height: 1440 });
+    await page.setViewport({ width: CAPTURE_WIDTH, height: CAPTURE_HEIGHT });
 
     console.log(`>>> Loading Slideshow: ${htmlFile}...`);
     await page.goto(`file://${htmlFile}`, { waitUntil: 'networkidle2' });
@@ -279,7 +289,7 @@ async function run() {
     async function worker() {
       while (queue.length > 0) {
         const { s, i } = queue.shift();
-        const segmentPath = path.join(tmpDir, `segment_${i.toString().padStart(4, '0')}.mp4`);
+        const segmentPath = path.join(tmpDir, `segment_${i.toString().padStart(4, '0')}.mkv`);
 
         let ffmpegArgs;
         if (s.audioPath) {
@@ -287,19 +297,25 @@ async function run() {
             '-y', '-v', 'error',
             '-loop', '1', '-i', s.screenshotPath,
             '-i', s.audioPath,
-            '-c:v', 'libx264', '-t', s.duration.toString(),
-            '-pix_fmt', 'yuv420p', '-vf', 'scale=2560:1440',
-            '-c:a', 'aac', '-b:a', '192k',
+            '-r', FRAME_RATE,
+            '-c:v', 'libx264', '-profile:v', 'high', '-level', '4.1',
+            '-b:v', VIDEO_BITRATE, '-maxrate', VIDEO_BITRATE, '-bufsize', '20M',
+            '-t', s.duration.toString(),
+            '-pix_fmt', 'yuv420p', '-vf', `scale=${OUTPUT_WIDTH}:${OUTPUT_HEIGHT}`,
+            '-c:a', 'aac', '-b:a', AUDIO_BITRATE, '-ar', SAMPLE_RATE,
             segmentPath
           ];
         } else {
           ffmpegArgs = [
             '-y', '-v', 'error',
-            '-f', 'lavfi', '-i', 'anullsrc=channel_layout=stereo:sample_rate=44100',
+            '-f', 'lavfi', '-i', `anullsrc=channel_layout=stereo:sample_rate=${SAMPLE_RATE}`,
             '-loop', '1', '-i', s.screenshotPath,
-            '-c:v', 'libx264', '-t', s.duration.toString(),
-            '-pix_fmt', 'yuv420p', '-vf', 'scale=2560:1440',
-            '-c:a', 'aac', '-shortest',
+            '-r', FRAME_RATE,
+            '-c:v', 'libx264', '-profile:v', 'high', '-level', '4.1',
+            '-b:v', VIDEO_BITRATE, '-maxrate', VIDEO_BITRATE, '-bufsize', '20M',
+            '-t', s.duration.toString(),
+            '-pix_fmt', 'yuv420p', '-vf', `scale=${OUTPUT_WIDTH}:${OUTPUT_HEIGHT}`,
+            '-c:a', 'aac', '-b:a', AUDIO_BITRATE, '-shortest',
             segmentPath
           ];
         }
