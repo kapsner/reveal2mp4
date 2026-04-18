@@ -13,7 +13,8 @@
 
 ### Other changes
 
-- video resolution to wqhd (11ecd82)
+- fixed typo (e6853f9)
+- video resolution to wqhd (6423802)
 - printing duration of the cmd-run at the end (ab15071)
 - default concurrency to 2 (18b17bf)
 - robust find-chromium fun (2cc1e25)

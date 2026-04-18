@@ -32,7 +32,7 @@ Puppeteer requires a browser to render the slides. Usually, it downloads a local
 
 1. Navigate to the tool directory:
    ```bash
-   cd reveal2mp4-tool
+   cd reveal2mp4
    ```
 
 2. Install dependencies:
