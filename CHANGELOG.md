@@ -14,7 +14,8 @@
 
 ### Other changes
 
-- merged into main (2980255)
+- updated pre-commit ver (6cca8b5)
+- merged into main (9034690)
 - Update README.md (a092d11)
 - update README.md (b94c0e3)
 - fixed typo (29adceb)
