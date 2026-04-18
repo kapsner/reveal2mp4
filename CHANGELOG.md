@@ -8,12 +8,15 @@
 
 ### New Features
 
-- constant video framerate, high-res capturing, full-hd video-rendering (104d8d3)
+- constant video framerate, high-res capturing, full-hd video-rendering (0e9f3d8)
 - improved error handling (71e3e96)
 - parallel rendering for increased performance (08052dc)
 
 ### Other changes
 
+- merged into main (2980255)
+- Update README.md (a092d11)
+- update README.md (b94c0e3)
 - fixed typo (29adceb)
 - video resolution to wqhd (6423802)
 - printing duration of the cmd-run at the end (ab15071)
